@@ -10,12 +10,15 @@ import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.testegft.dto.ListaProdutosDTO;
 import com.example.testegft.dto.ProdutoDTO;
+import com.example.testegft.model.Produto;
+import com.example.testegft.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
@@ -26,12 +29,20 @@ public class InitConfiguration {
 	private static final String DATA_PATH = "src/main/resources/massa/";
 
 	@Autowired
-	ObjectMapper mapper;
+	private ObjectMapper mapper;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
 	@Bean
 	public void loadData() {
 		List<String> nomesArquivos = buscaArquivosMassa();
 		List<ProdutoDTO> lista = getDadosArquivos(nomesArquivos);
+		gravaProdutos(lista);
+		System.out.println("Termino");
 	}
 
 	private List<String> buscaArquivosMassa() {
@@ -55,4 +66,16 @@ public class InitConfiguration {
 		});
 		return produtos;
 	}
+
+	private void gravaProdutos(List<ProdutoDTO> produtosDTO) {
+		List<Produto> produtos = convertDTOToProduto(produtosDTO);
+		produtos.forEach(produtoRepository::saveAndFlush);
+	}
+
+	private List<Produto> convertDTOToProduto(List<ProdutoDTO> produtosDTO) {
+		List<Produto> produtos = new ArrayList<>();
+		produtosDTO.forEach(produtoDTO -> produtos.add(modelMapper.map(produtoDTO, Produto.class)));
+		return produtos;
+	}
+
 }

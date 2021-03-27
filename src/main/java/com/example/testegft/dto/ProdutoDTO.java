@@ -1,22 +1,36 @@
 package com.example.testegft.dto;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @NoArgsConstructor
 public class ProdutoDTO {
 
-	private String product;
+	@JsonProperty("product")
+	private String nome;
 
-	private Integer quantity;
+	@JsonProperty("quantity")
+	private Integer quantidade;
 
-	private String price;
+	@JsonProperty("price")
+	private String preco;
 
-	private String type;
+	@JsonProperty("type")
+	private String tipo;
 
-	private String industry;
+	@JsonProperty("industry")
+	private String industria;
 
-	private String origin;
+	@JsonProperty("origin")
+	private String origem;
+
+	public BigDecimal getPreco() {
+		return new BigDecimal(preco.replaceAll("\\$", ""));
+	}
 
 }
