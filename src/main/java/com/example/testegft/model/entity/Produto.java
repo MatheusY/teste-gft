@@ -1,4 +1,4 @@
-package com.example.testegft.model;
+package com.example.testegft.model.entity;
 
 import java.math.BigDecimal;
 
@@ -9,12 +9,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import com.example.testegft.model.enumerate.TipoProdutoEnum;
+
 @Entity
-@Table(name = "TB_PRODUTO")
+@Table(name = "TB_PRODUTO", //
+		uniqueConstraints = { //
+				@UniqueConstraint(columnNames = { "NOME", "QUANTIDADE", "TIPO", "PRECO", "INDUSTRIA", "ORIGEM", "DADO_ORIGEM" }) })
 @Getter
 @Setter
 public class Produto {
@@ -35,7 +40,7 @@ public class Produto {
 	private BigDecimal preco;
 
 	@Column(name = "TIPO")
-	private String tipo;
+	private TipoProdutoEnum tipo;
 
 	@Column(name = "INDUSTRIA")
 	private String industria;
@@ -43,4 +48,6 @@ public class Produto {
 	@Column(name = "ORIGEM")
 	private String origem;
 
+	@Column(name = "DADO_ORIGEM")
+	private String dadoOrigem;
 }

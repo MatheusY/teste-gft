@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.example.testegft.model.enumerate.TipoProdutoEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
@@ -29,8 +30,18 @@ public class ProdutoDTO {
 	@JsonProperty("origin")
 	private String origem;
 
+	private String dadoOrigem;
+
 	public BigDecimal getPreco() {
 		return new BigDecimal(preco.replaceAll("\\$", ""));
+	}
+
+	public TipoProdutoEnum getTipo() {
+		return TipoProdutoEnum.valueOfId(tipo);
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome.strip();
 	}
 
 }
