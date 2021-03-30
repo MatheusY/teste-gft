@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.testegft.dto.ListaProdutosDTO;
@@ -25,10 +26,12 @@ public class ArquivoUtil {
 	private ObjectMapper mapper;
 
 	private static final String EXTENSION_JSON = ".json";
-	private static final String DATA_PATH = "src/main/resources/massa/";
+
+	@Value("${data.path}")
+	private String dataPath;
 
 	public List<String> buscaArquivosMassa() {
-		File pasta = new File(DATA_PATH);
+		File pasta = new File(dataPath);
 		return Arrays.stream(pasta.listFiles()) //
 				.map(File::getName) //
 				.filter(arquivo -> Objects.nonNull(arquivo) && arquivo.endsWith(EXTENSION_JSON)) //
@@ -41,7 +44,7 @@ public class ArquivoUtil {
 		nomesArquivos.forEach(nomeArquivo -> {
 			String nomeArquivoSemExtensao = nomeArquivo.replaceFirst(EXTENSION_JSON, "");
 			try {
-				ListaProdutosDTO produtosDTO = mapper.readValue(new File(DATA_PATH + nomeArquivo), ListaProdutosDTO.class);
+				ListaProdutosDTO produtosDTO = mapper.readValue(new File(dataPath + nomeArquivo), ListaProdutosDTO.class);
 
 				produtosDTO.getData().forEach(produto -> {
 					produto.setDadoOrigem(nomeArquivoSemExtensao);

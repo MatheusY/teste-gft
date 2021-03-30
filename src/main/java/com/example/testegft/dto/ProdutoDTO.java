@@ -41,7 +41,7 @@ public class ProdutoDTO {
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome.strip();
+		this.nome = nome.trim();
 	}
 
 }
